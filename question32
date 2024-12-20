@@ -1,0 +1,32 @@
+#include <windows.h>
+
+#include <iostream>
+
+
+
+int main() {
+
+    HANDLE eventHandle = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+    CreateThread(NULL, 0, [](LPVOID param) {
+
+        WaitForSingleObject((HANDLE)param, INFINITE);
+
+        std::cout << "Подія сигналізована!" << std::endl;
+
+        return 0;
+
+    }, eventHandle, 0, NULL);
+
+    Sleep(2000);  // Затримка 2 секунди
+
+    SetEvent(eventHandle);  // Сигналізуємо подію
+
+    Sleep(1000);  // Чекаємо на завершення потоку
+
+    CloseHandle(eventHandle);
+
+    return 0;
+
+}
+
